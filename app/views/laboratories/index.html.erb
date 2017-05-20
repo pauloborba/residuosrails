@@ -6,7 +6,7 @@
   <thead>
     <tr>
       <th>Name</th>
-      <th>Departament</th>
+      <th>Dep name</th>
       <th>Facilitador</th>
       <th colspan="3"></th>
     </tr>
@@ -16,7 +16,7 @@
     <% @laboratories.each do |laboratory| %>
       <tr>
         <td><%= laboratory.name %></td>
-        <td><%= laboratory.departament %></td>
+        <td><%= laboratory.dep_name %></td>
         <td><%= laboratory.facilitador %></td>
         <td><%= link_to 'Show', laboratory %></td>
         <td><%= link_to 'Edit', edit_laboratory_path(laboratory) %></td>

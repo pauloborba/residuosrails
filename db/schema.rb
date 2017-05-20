@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170516212252) do
+ActiveRecord::Schema.define(version: 20170519203456) do
 
   create_table "departments", force: :cascade do |t|
     t.string   "name"
@@ -20,7 +20,7 @@ ActiveRecord::Schema.define(version: 20170516212252) do
 
   create_table "laboratories", force: :cascade do |t|
     t.string   "name"
-    t.string   "departament"
+    t.string   "dep_name"
     t.string   "facilitador"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
@@ -29,11 +29,12 @@ ActiveRecord::Schema.define(version: 20170516212252) do
   create_table "residues", force: :cascade do |t|
     t.string   "name"
     t.string   "laboratory"
-    t.integer  "weight",     default: 0
+    t.integer  "weight",      default: 0
     t.string   "collection"
     t.string   "type"
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.string   "composition"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
   end
 
 end
