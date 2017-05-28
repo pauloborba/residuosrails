@@ -4,7 +4,7 @@ RSpec.describe "laboratories/edit", type: :view do
   before(:each) do
     @laboratory = assign(:laboratory, Laboratory.create!(
       :name => "MyString",
-      :departament => "MyString",
+      :dep_name => "MyString",
       :facilitador => "MyString"
     ))
   end
@@ -16,7 +16,7 @@ RSpec.describe "laboratories/edit", type: :view do
 
       assert_select "input#laboratory_name[name=?]", "laboratory[name]"
 
-      assert_select "input#laboratory_departament[name=?]", "laboratory[departament]"
+      assert_select "input#laboratory_dep_name[name=?]", "laboratory[dep_name]"
 
       assert_select "input#laboratory_facilitador[name=?]", "laboratory[facilitador]"
     end
