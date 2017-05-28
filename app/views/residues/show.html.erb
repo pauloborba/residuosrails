@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @residue.name %>
+</p>
+
+<p>
+  <strong>Laboratory:</strong>
+  <%= @residue.laboratory %>
+</p>
+
+<p>
+  <strong>Weight:</strong>
+  <%= @residue.weight %>
+</p>
+
+<p>
+  <strong>Collection:</strong>
+  <%= @residue.collection %>
+</p>
+
+<%= link_to 'Edit', edit_residue_path(@residue) %> |
+<%= link_to 'Back', residues_path %>
