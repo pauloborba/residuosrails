@@ -78,3 +78,65 @@ Scenario: Gerar Dados Sobre o Resíduo Mais Frequentemente Cadastrado por Labora
   When eu seleciono a opção "Gerar Resíduo Mais Frequentemente Cadastrado por Laboratorio"
   Then eu vejo a lista "Resíduo Mais Frequentemente Cadastrado por Laboratorio" com "Ácido Acetico" para o "Laboratorio de Ciência Forense" e com "Álcool" para o "Laboratorio de Química Organica"
   
+@b9
+Scenario: Gerar Dados de Total de Resíduos Acumulados por Departamento baseado em resíduos cadastrados
+  Given que o "Departamento de Antibióticos" e o "Departamento de Anatomia Humana" estão cadastrados no sistema
+  And que "300" kg de "Ácido Acético" estão no "Departamento de Antibióticos"
+  And que "100" kg de "Cal" estão no "Departamento de Antibióticos"
+  And que "500" kg de "Cal" estão no "Departamento de Anatomia Humana"
+  When eu tento gerar o "Total de Resíduos Acumulados por Departamento"
+  Then o sistema calcula o "Total de Resíduos Acumulados por Departamento" com "500" kg para o "Departamento de Anatomia Humana" e "400" kg para o "Departamento de Antibióticos"  
+  
+@b10
+Scenario: Calcular Quantidade Média de Resíduos Cadastrados baseado em resíduos cadastrados no sistema
+  Given existe "1500" kg de residuos cadastrados no sistema
+  And a ultima coleta foi feita a "10" dias
+  When eu tento calcular a "Quantidade Média de Resíduos Cadastrados"
+  Then o sistema calcula a média de "150" kg/dia
+
+@b11
+Scenario: Previsão de Notificação de Coleta baseado em resíduos armazenados, GUI
+  Given eu estou na página de estatistica
+  And eu vejo a lista de "Resíduos Cadastrados"
+  And eu vejo que o total de resíduos armazenados é "1200" kg
+  And eu vejo que a última coleta foi feita a "10" dias
+  And eu vejo que o limite de peso de resíduos é "7500" kg
+  When eu seleciono a opção "Gerar Previsão de Notificação de Coleta"
+  Then eu vejo que em "53" dias precisarei fazer a licitação para a coleta
+
+@b12
+Scenario: Gerar Dados de Total de Resíduos Acumulados por Departamento baseado em resíduos cadastrados, GUI
+  Given eu estou na página de estatistica
+  And eu vejo uma lista de "Resíduos Cadastrados" com "500" kg de "Ácido Acético" no "Departamento de Anatomia Humana" e "300" kg de "Ácido Acético" no "Departamento de Antibióticos" e "1200" kg de "Cal" no "Departamento de Anatomia Humana"
+  When eu seleciono a opção "Gerar Total de Resíduos Acumulados por Departamento"
+  Then eu vejo uma lista com o "Total de Resíduos Acumulados por Departamento" com "1700" kg para o "Departamento de Anatomia Humana" e "300" kg para o "Departamento de Antibióticos"
+  
+@b13
+Scenario: Calcular a Média de Resíduos Cadastrados por Tipo baseado em resíduos cadastrados
+  Given existe "800" kg de "Ácido Acético" de tipo "Líquido Inflamável" cadastrado no sistema
+  And existe "300" kg de "Etanol" de tipo "Líquido Inflamável" cadastrado no sistema
+  And existe "1200" kg de "Cal" de tipo "Sólido Inorgânico" cadastrado no sistema
+  When eu tento calcular a "Quantidade Média de Resíduos Cadastrados por Tipo"
+  Then o sistema calcula a média de "550" kg para o tipo "Líquido Inflamável"
+  And o sistema calcula a média de "1200" kg para o tipo "Sólido Inorgânico"
+  
+@b14
+Scenario: Calcular a Média de Resíduos Cadastrados por Departamento baseado em resíduos cadastrados
+ Given que o "Departamento de Antibióticos" e o "Departamento de Anatomia Humana" estão cadastrados no sistema
+  And que "300" kg de "Ácido Acético" estão no "Departamento de Antibióticos"
+  And que "100" kg de "Cal" estão no "Departamento de Antibióticos"
+  And que "500" kg de "Cal" estão no "Departamento de Anatomia Humana"
+  When eu tento calcular a "Quantidade Média de Resíduos Cadastrados por Departamento"
+  Then o sistema calcula a média de "200" kg para o "Departamento de Antibióticos"
+  And o sistema calcula a média de "500" kg para o "Departamento de Anatomia Humana"
+  
+@b15
+Scenario: Calcular a Média de Resíduos Cadastrados por Tipo baseado em resíduos armazenados, GUI
+  Given eu estou na página de estatistica
+  And eu vejo a lista de "Resíduos Cadastrados"
+  And eu vejo "800" kg de "Ácido Acético" de tipo "Líquido Inflamável" 
+  And eu vejo "300" kg de "Etanol" de tipo "Líquido Inflamável"
+  And eu vejo "1200" kg de "Cal" de tipo "Sólido Inorgânico"
+  When eu seleciono a opção "Quantidade Média de Resíduos Cadastrados por Tipo"
+  Then eu vejo uma lista da "Quantidade Média de Resíduos Cadastrados por Tipo" com "550" kg para o tipo "Líquido Inflamável" e "1200" kg para o tipo "Sólido Inorgânico"
+  

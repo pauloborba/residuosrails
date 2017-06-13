@@ -110,6 +110,9 @@ When(/^eu tento gerar o "([^"]*)"$/) do |action|
  elsif action == "Resíduo Mais Frequentemente Cadastrado por Laboratorio"
   @collection = Collection.last
   @collection.residue_often_registered
+ elsif action == "Total de Resíduos Acumulados por Departamento"
+  @collection = Collection.last
+  @collection.dep_residue
  end
 end
 
@@ -326,4 +329,142 @@ Then(/^eu vejo a lista "([^"]*)" com "([^"]*)" para o "([^"]*)" e com "([^"]*)" 
  expect(element.text).to eq(list)
  expect(page).to have_content lab_name1+" "+res_name1
  expect(page).to have_content lab_name2+" "+res_name2
+end
+
+Given(/^que o "([^"]*)" e o "([^"]*)" estão cadastrados no sistema$/) do |dep_name1, dep_name2|
+  param_dep1 = cad_dep(dep_name1)
+  expect(param_dep1).to_not be nil
+  param_dep2 = cad_dep(dep_name2)
+  expect(param_dep2).to_not be nil
+end
+
+Given(/^que "([^"]*)" kg de "([^"]*)" estão no "([^"]*)"$/) do |res_weight, res_name, dep_name|
+ if Collection.all.empty?
+  param_col = cad_col(0)
+  expect(param_col).to_not be nil
+ end
+ param_dep = Department.find_by(name: dep_name)
+ expect(param_dep).to_not be nil
+ param_lab = cad_lab("Laboratorio de Genetica Aplicada " + dep_name, param_dep.id)
+ expect(param_lab).to_not be nil
+ name = res_name + " " + param_lab.name
+ param_res = cad_res(name, param_lab.id, "Líquido Inflamável")
+ expect(param_res).to_not be nil
+ param_reg = cad_reg(res_weight.to_f(), param_res.id)
+ expect(param_reg).to_not be nil
+end
+
+Then(/^o sistema calcula o "([^"]*)" com "([^"]*)" kg para o "([^"]*)" e "([^"]*)" kg para o "([^"]*)"$/) do |action, res_weight1, dep_name1, res_weight2, dep_name2|
+  if action == "Total de Resíduos Acumulados por Departamento"
+   expect(@collection.dep_residue_weight[dep_name1.parameterize.underscore.to_sym]).to eq(res_weight1.to_f())
+   expect(@collection.dep_residue_weight[dep_name2.parameterize.underscore.to_sym]).to eq(res_weight2.to_f())
+  end
+end
+
+When(/^eu tento calcular a "([^"]*)"$/) do |action|
+  if action == "Quantidade Média de Resíduos Cadastrados"
+   @collection = Collection.last
+   @collection.generate_prediction
+  elsif action == "Quantidade Média de Resíduos Cadastrados por Tipo"
+   @collection = Collection.last
+   @collection.generate_mean_type
+  elsif action == "Quantidade Média de Resíduos Cadastrados por Departamento"
+   @collection = Collection.last
+   @collection.calc_mean_dep
+  end
+end
+
+Given(/^eu vejo que o total de resíduos armazenados é "([^"]*)" kg$/) do |res_weight|
+  cad_col_gui(7500)
+  cad_dep_gui("Departamento de Anatomia Humana")
+  cad_lab_gui("Laboratorio de Genetica Aplicada", "Departamento de Anatomia Humana")
+  cad_res_gui("Cal", "Laboratorio de Genetica Aplicada", "Líquido Inflamável")
+  cad_reg_gui(res_weight, "Cal")
+  visit 'statistic'
+  total = res_weight.to_f()
+  str = "Peso Total: " + total.to_s
+  p str
+  element = find("th", text: str)
+  expect(element).to_not be nil
+end
+
+Given(/^eu vejo que a última coleta foi feita a "([^"]*)" dias$/) do |last_collection|
+  str = "Dias desde a ultima coleta :" + last_collection
+  element = find("th", text: str)
+  expect(element).to_not be nil
+end
+
+Given(/^eu vejo que o limite de peso de resíduos é "([^"]*)" kg$/) do |limit_weight|
+  str = "Limite de Peso: " + limit_weight
+  element = find("th", text: str)
+  expect(element).to_not be nil
+end
+
+Then(/^eu vejo que em "([^"]*)" dias precisarei fazer a licitação para a coleta$/) do |miss_days|
+  str = "A próxima coleta deverá ser feita em " + miss_days + " dias"
+  element = find("th", str)
+  expect(element).to_not be nil
+end
+
+Given(/^eu vejo uma lista de "([^"]*)" com "([^"]*)" kg de "([^"]*)" no "([^"]*)" e "([^"]*)" kg de "([^"]*)" no "([^"]*)" e "([^"]*)" kg de "([^"]*)" no "([^"]*)"$/) do |list, res_weight1, res_name1, dep_name1, res_weight2, res_name2, dep_name2, res_weight3, res_name3, dep_name3|
+  cad_col_gui(7500)
+  cad_dep_gui(dep_name1)
+  cad_dep_gui(dep_name2)
+  cad_dep_gui(dep_name3)
+  cad_lab_gui("Laboratorio de Genetica Aplicada", dep_name1)
+  cad_lab_gui("Laboratorio de Processos Biotecnológicos", dep_name2)
+  cad_lab_gui("Laboratorio de Microbiologia Clínica", dep_name3)
+  name1 = res_name1 + dep_name1
+  name2 = res_name2 + dep_name2
+  name3 = res_name3 + dep_name3
+  cad_res_gui(name1, "Laboratorio de Genetica Aplicada", "Líquido Inflamável")
+  cad_reg_gui(res_weight1, res_name1)
+  cad_res_gui(name2, "Laboratorio de Processos Biotecnológicos", "Sólido Inorgânico")
+  cad_reg_gui(res_weight2, res_name2)
+  cad_res_gui(name3, "Laboratorio de Microbiologia Clínica", "Outros")
+  cad_reg_gui(res_weight3, res_name3)
+  visit 'statistic'
+  element = find("th", text: list)
+  expect(element).to eq(list)
+  expect(page).to have_content res_name1 + " Líquido Inflamável " + res_weight1 + " Laboratorio de Genetica Aplicada " + dep_name1
+  expect(page).to have_content res_name2 + " Sólido Inorgânico " + res_weight2 + " Laboratorio de Processos Biotecnológicos " + dep_name2
+  expect(page).to have_content res_name3 + " Outros " + res_weight3 + " Laboratorio de Microbiologia Clínica " + dep_name3
+end
+
+Then(/^eu vejo uma lista com o "([^"]*)" com "([^"]*)" kg para o "([^"]*)" e "([^"]*)" kg para o "([^"]*)"$/) do |list, res_weight1, dep_name1, res_weight2, dep_name2|
+  element = find("th", text: list)
+  expect(element).to_not be nil
+  expect(page).to have_content dep_name1 + " " + res_weight1
+  expect(page).to have_content dep_name2 + " " + res_weight2
+  expect(page).to have_content dep_name3 + " " + res_weight3
+end
+
+Then(/^o sistema calcula a média de "([^"]*)" kg para o tipo "([^"]*)"$/) do |res_weight, res_type|
+  validate_type(res_type, res_weight)
+end
+
+def validate_type(res_type, res_weight)
+ case res_type
+ when "Sólido Orgânico"
+  expect(@collection.solido_organico_mean) == (res_weight.to_f())
+ when "Sólido Inorgânico"
+  expect(@collection.solido_inorganico_mean) == (res_weight.to_f())
+ when "Líquido Orgânico"
+  expect(@collection.liquido_organico_mean) == (res_weight.to_f())
+ when "Líquido Inorgânico"
+  expect(@collection.liquido_inorganico_mean) == (res_weight.to_f())
+ when "Líquido Inflamável"
+  expect(@collection.liquido_inflamavel_mean) == (res_weight.to_f())
+ when "Outros"
+  expect(@collection.outros_mean) == (res_weight.to_f())
+ end
+end
+
+Then(/^o sistema calcula a média de "([^"]*)" kg para o "([^"]*)"$/) do |res_weight, dep_name|
+  p @collection.dep_mean
+  validate_dep(res_weight, dep_name)  
+end
+
+def validate_dep(res_weight, dep_name)
+ expect(@collection.dep_mean[dep_name.parameterize.underscore.to_sym]).to eq(res_weight.to_f())
 end

@@ -1,0 +1,26 @@
+<h1>Residuos Divididos por Departamentos</h1>
+
+<% @collection = Collection.last %>
+<table>
+    <thead>
+        <tr>
+            <th>Total de Resíduos Acumulados por Departamento</th>
+            <tr>
+                <th>Departamento</th>
+                <th>Peso</th>
+                <th colspan="3"></th>
+            </tr>
+        </tr>
+    </thead>
+    
+    <tbody>
+        <% @collection.dep_residue%>
+        <% Department.all.each do |dept| %>
+        <tr>
+            <td><%= @collection.dep_residue_list[dept.name.parameterize.underscore.to_sym] %></td>
+            <td><%= @collection.dep_residue_weight[dept.name.parameterize.underscore.to_sym] %></td>
+        </tr>
+        <% end %>
+    </tbody>
+</table>
+<br>

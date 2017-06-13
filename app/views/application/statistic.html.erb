@@ -42,6 +42,15 @@
     </tr>
   </thead>
 
+  <%if !Collection.all.empty? %>
+  <% collection = Collection.last %>
+  <th>Peso total: <%= collection.total_weight%></th>
+  <br>
+  <th>Dias desde a ultima coleta: <%= collection.created_at%></th>
+  <br>
+  <th>Limite de Peso: <%= collection.max_value%></th>
+  <%end%>
+
   <tbody>
     <% if !Residue.all.empty? %>
       <% Residue.all.each do |residue| %>
@@ -69,6 +78,7 @@
       <input onclick='input()' type='button' value='Gerar Total de Resíduos Acumulados por Tipo' id='button'><br><br>
       <input onclick='input()' type='button' value='Gerar Total de Resíduos Acumulados por Tipo em Porcentagem' id='button'><br><br>
       <input onclick='input()' type='button' value='Gerar Resíduo Mais Frequentemente Cadastrado por Laboratorio' id='button'><br><br>
+      <input onclick='input()' type='button' value='Gerar Total de Resíduos Acumulados por Departamento' id='button'><br>
       <div><textarea name='area' rows="2" cols="550" readonly></textarea></div>
     </form>
   <% else %>
@@ -76,6 +86,7 @@
     <%= button_to 'Gerar Total de Resíduos Acumulados por Tipo', '/types', method: :get %>
     <%= button_to 'Gerar Total de Resíduos Acumulados por Tipo em Porcentagem', '/percent', method: :get %>
     <%= button_to 'Gerar Resíduo Mais Frequentemente Cadastrado por Laboratorio', '/often', method: :get %>
+    <%= button_to 'Gerar Total de Resíduos Acumulados por Departamento', 'generate_deps', method: :post %>
   <% end %>
 </body>
 <<<<<<< HEAD
