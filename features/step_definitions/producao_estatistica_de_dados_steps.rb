@@ -417,29 +417,29 @@ Given(/^eu vejo uma lista de "([^"]*)" com "([^"]*)" kg de "([^"]*)" no "([^"]*)
   cad_lab_gui("Laboratorio de Genetica Aplicada", dep_name1)
   cad_lab_gui("Laboratorio de Processos Biotecnológicos", dep_name2)
   cad_lab_gui("Laboratorio de Microbiologia Clínica", dep_name3)
-  name1 = res_name1 + dep_name1
-  name2 = res_name2 + dep_name2
-  name3 = res_name3 + dep_name3
+  name1 = res_name1 + " " + dep_name1
+  name2 = res_name2 + " " + dep_name2
+  name3 = res_name3 + " " + dep_name3
   cad_res_gui(name1, "Laboratorio de Genetica Aplicada", "Líquido Inflamável")
-  cad_reg_gui(res_weight1, res_name1)
+  cad_reg_gui(res_weight1, name1)
   cad_res_gui(name2, "Laboratorio de Processos Biotecnológicos", "Sólido Inorgânico")
-  cad_reg_gui(res_weight2, res_name2)
+  cad_reg_gui(res_weight2, name2)
   cad_res_gui(name3, "Laboratorio de Microbiologia Clínica", "Outros")
-  cad_reg_gui(res_weight3, res_name3)
+  cad_reg_gui(res_weight3, name3)
   visit 'statistic'
   element = find("th", text: list)
-  expect(element).to eq(list)
-  expect(page).to have_content res_name1 + " Líquido Inflamável " + res_weight1 + " Laboratorio de Genetica Aplicada " + dep_name1
-  expect(page).to have_content res_name2 + " Sólido Inorgânico " + res_weight2 + " Laboratorio de Processos Biotecnológicos " + dep_name2
-  expect(page).to have_content res_name3 + " Outros " + res_weight3 + " Laboratorio de Microbiologia Clínica " + dep_name3
+  expect(element.text).to eq(list)
+  expect(page).to have_content name1 + " Líquido Inflamável " + res_weight1.to_f().to_s + " Laboratorio de Genetica Aplicada " + dep_name1
+  expect(page).to have_content name2 + " Sólido Inorgânico " + res_weight2.to_f().to_s + " Laboratorio de Processos Biotecnológicos " + dep_name2
+  expect(page).to have_content name3 + " Outros " + res_weight3.to_f().to_s + " Laboratorio de Microbiologia Clínica " + dep_name3
 end
 
 Then(/^eu vejo uma lista com o "([^"]*)" com "([^"]*)" kg para o "([^"]*)" e "([^"]*)" kg para o "([^"]*)"$/) do |list, res_weight1, dep_name1, res_weight2, dep_name2|
   element = find("th", text: list)
   expect(element).to_not be nil
+  page.save_screenshot()
   expect(page).to have_content dep_name1 + " " + res_weight1
   expect(page).to have_content dep_name2 + " " + res_weight2
-  expect(page).to have_content dep_name3 + " " + res_weight3
 end
 
 Then(/^o sistema calcula a média de "([^"]*)" kg para o tipo "([^"]*)"$/) do |res_weight, res_type|
