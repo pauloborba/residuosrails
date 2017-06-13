@@ -1,0 +1,26 @@
+<h1>Página de Geração de Quantidade Média de Resíduos Cadastrados Dividido por Departamento</h1>
+
+<% @collection = Collection.last %>
+<table>
+    <thead>
+        <tr>
+            <th>Quantidade Média de Resíduos Cadastrados por Departamento</th>
+            <tr>
+                <th>Tipo</th>
+                <th>Média</th>
+                <th colspan="3"></th>
+            </tr>
+        </tr>
+    </thead>
+    
+    <tbody>
+        <% @collection.calc_mean_dep %>
+         <% Department.all.each do |dept| %>
+       <tr>
+            <td><%= dept.name %></td>
+            <td><%= @collection.dep_mean[dept.name.parameterize.underscore.to_sym] %> kg</td>
+        </tr>
+        <% end %>
+    </tbody>
+</table>
+<br>

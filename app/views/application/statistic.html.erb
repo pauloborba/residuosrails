@@ -79,6 +79,8 @@
       <input onclick='input()' type='button' value='Gerar Total de Resíduos Acumulados por Tipo em Porcentagem' id='button'><br><br>
       <input onclick='input()' type='button' value='Gerar Resíduo Mais Frequentemente Cadastrado por Laboratorio' id='button'><br><br>
       <input onclick='input()' type='button' value='Gerar Total de Resíduos Acumulados por Departamento' id='button'><br>
+      <input onclick='input()' type='button' value='Quantidade Média de Resíduos Cadastrados por Tipo' id='button'><br>
+      <input onclick='input()' type='button' value='Quantidade Média de Resíduos Cadastrados por Departamento' id='button'><br>
       <div><textarea name='area' rows="2" cols="550" readonly></textarea></div>
     </form>
   <% else %>
@@ -86,7 +88,9 @@
     <%= button_to 'Gerar Total de Resíduos Acumulados por Tipo', '/types', method: :get %>
     <%= button_to 'Gerar Total de Resíduos Acumulados por Tipo em Porcentagem', '/percent', method: :get %>
     <%= button_to 'Gerar Resíduo Mais Frequentemente Cadastrado por Laboratorio', '/often', method: :get %>
-    <%= button_to 'Gerar Total de Resíduos Acumulados por Departamento', 'generate_deps', method: :get %>
+    <%= button_to 'Gerar Total de Resíduos Acumulados por Departamento', '/generate_deps', method: :get %>
+    <%= button_to 'Quantidade Média de Resíduos Cadastrados por Tipo', '/generate_mean_type', method: :get %>
+    <%= button_to 'Quantidade Média de Resíduos Cadastrados por Departamento', '/generate_mean_dep', method: :get %>
   <% end %>
 </body>
 <<<<<<< HEAD

@@ -405,7 +405,8 @@ end
 
 Then(/^eu vejo que em "([^"]*)" dias precisarei fazer a licitação para a coleta$/) do |miss_days|
   str = "A próxima coleta deverá ser feita em " + miss_days + " dias"
-  element = find("th", str)
+  page.save_screenshot()
+  element = find("th", text: str)
   expect(element).to_not be nil
 end
 
@@ -437,7 +438,6 @@ end
 Then(/^eu vejo uma lista com o "([^"]*)" com "([^"]*)" kg para o "([^"]*)" e "([^"]*)" kg para o "([^"]*)"$/) do |list, res_weight1, dep_name1, res_weight2, dep_name2|
   element = find("th", text: list)
   expect(element).to_not be nil
-  page.save_screenshot()
   expect(page).to have_content dep_name1 + " " + res_weight1
   expect(page).to have_content dep_name2 + " " + res_weight2
 end
@@ -469,4 +469,31 @@ end
 
 def validate_dep(res_weight, dep_name)
  expect(@collection.dep_mean[dep_name.parameterize.underscore.to_sym]).to eq(res_weight.to_f())
+end
+
+Then(/^eu vejo uma lista da "([^"]*)" com "([^"]*)" kg para o tipo "([^"]*)" e "([^"]*)" kg para o tipo "([^"]*)"$/) do |list, res_weight1, res_type1, res_weight2, res_type2|
+  element = find("th", text: list)
+  expect(element).to_not be nil
+  expect(page).to have_content res_type1 + " " + res_weight1.to_f().to_s + " kg"
+  expect(page).to have_content res_type2 + " " + res_weight2.to_f().to_s + " kg"
+end
+
+Given(/^eu vejo "([^"]*)" kg de "([^"]*)" no "([^"]*)"$/) do |res_weight, res_name, dep_name|
+  if Collection.all.empty?
+    cad_col_gui(7500)
+  end
+  cad_dep_gui(dep_name)
+  cad_lab_gui("Laboratorio de Genetica Aplicada " + dep_name, dep_name)
+  name = res_name + " " + dep_name
+  cad_res_gui(name, "Laboratorio de Genetica Aplicada " + dep_name, "Líquido Inflamável")
+  cad_reg_gui(res_weight, name)
+   visit 'statistic'
+  expect(page).to have_content name + " Líquido Inflamável " + res_weight.to_f().to_s + " Laboratorio de Genetica Aplicada " + dep_name
+end
+
+Then(/^eu vejo uma lista da "([^"]*)" com "([^"]*)" kg para o "([^"]*)" e "([^"]*)" kg para o "([^"]*)"$/) do |list, res_weight1, dep_name1, res_weight2, dep_name2|
+  element = find("th", text: list)
+  expect(element).to_not be nil
+  expect(page).to have_content dep_name1 + " " + res_weight1.to_f().to_s + " kg"
+  expect(page).to have_content dep_name2 + " " + res_weight2.to_f().to_s + " kg"
 end

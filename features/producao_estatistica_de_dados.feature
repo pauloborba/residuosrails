@@ -140,3 +140,12 @@ Scenario: Calcular a Média de Resíduos Cadastrados por Tipo baseado em resídu
   When eu seleciono a opção "Quantidade Média de Resíduos Cadastrados por Tipo"
   Then eu vejo uma lista da "Quantidade Média de Resíduos Cadastrados por Tipo" com "550" kg para o tipo "Líquido Inflamável" e "1200" kg para o tipo "Sólido Inorgânico"
   
+@b16
+Scenario: Calcular a Média de Resíduos Cadastrados por Departamento baseado em resíduos armazenados, GUI
+  Given eu estou na página de estatistica
+  And eu vejo a lista de "Resíduos Cadastrados"
+  And eu vejo "300" kg de "Ácido Acético" no "Departamento de Antibióticos"
+  And eu vejo "100" kg de "Cal" no "Departamento de Antibióticos"
+  And eu vejo "500" kg de "Cal" no "Departamento de Anatomia Humana"
+  When eu seleciono a opção "Quantidade Média de Resíduos Cadastrados por Departamento"
+  Then eu vejo uma lista da "Quantidade Média de Resíduos Cadastrados por Departamento" com "200" kg para o "Departamento de Antibióticos" e "500" kg para o "Departamento de Anatomia Humana"

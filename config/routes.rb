@@ -29,4 +29,6 @@ Rails.application.routes.draw do
   get '/generate_often', to: 'application#often'
   get '/generate_deps', to: 'application#generate_deps'
   get '/generate_prediction', to: 'application#generate_prediction'
+  get '/generate_mean_type', to: 'application#generate_mean_type'
+  get '/generate_mean_dep', to: 'application#generate_mean_dep'
 end
