@@ -1,0 +1,41 @@
+<div class="container">
+<p id="notice"><%= notice %></p>
+
+<h1>Resíduos</h1>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Nome</th>
+      <th>Tipo</th>
+      <th>Composição</th>
+      <th>Onu</th>
+      <th>Código</th>
+      <th>Laboratório</th>
+      <th>Coleta</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @residues.each do |residue| %>
+      <tr>
+        <td><%= residue.name %></td>
+        <td><%= residue.kind %></td>
+        <td><%= residue.blend %></td>
+        <td><%= residue.onu %></td>
+        <td><%= residue.code %></td>
+        <td><%= Laboratory.find(residue.laboratory_id).name %></td>
+        <td><%= (residue.collection_id != nil ? Collection.find(residue.collection_id).id : "SEM COLETA") %></td>
+        <td><%= link_to 'Show', residue , class: 'btn'%></td>
+        <td><%= link_to 'Destroy', residue, method: :delete, data: { confirm: 'Are you sure?',class: 'btn' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'Novo Resíduo', new_residue_path,class: 'btn' %>
+<%= link_to 'Voltar', main_adm_path,class: 'btn' %>
+</div>
