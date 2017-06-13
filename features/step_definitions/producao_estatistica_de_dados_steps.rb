@@ -405,9 +405,7 @@ end
 
 Then(/^eu vejo que em "([^"]*)" dias precisarei fazer a licitação para a coleta$/) do |miss_days|
   str = "A próxima coleta deverá ser feita em " + miss_days + " dias"
-  page.save_screenshot()
-  element = find("th", text: str)
-  expect(element).to_not be nil
+  expect(page).to have_content str
 end
 
 Given(/^eu vejo uma lista de "([^"]*)" com "([^"]*)" kg de "([^"]*)" no "([^"]*)" e "([^"]*)" kg de "([^"]*)" no "([^"]*)" e "([^"]*)" kg de "([^"]*)" no "([^"]*)"$/) do |list, res_weight1, res_name1, dep_name1, res_weight2, res_name2, dep_name2, res_weight3, res_name3, dep_name3|

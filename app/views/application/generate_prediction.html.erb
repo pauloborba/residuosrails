@@ -2,5 +2,7 @@
 
 <% @collection = Collection.last%>
 <% @collection.generate_prediction%>
-<th>A próxima coleta deverá ser feita em <%= @collection.miss_days%> dias</th>
+<body>
+    <th>A próxima coleta deverá ser feita em <%= @collection.miss_days%> dias</th>
+</body>
 <br>
