@@ -10,4 +10,5 @@ class ApplicationController < ActionController::Base
   def generate_deps
     render('generate_deps')
   end
+
 end
