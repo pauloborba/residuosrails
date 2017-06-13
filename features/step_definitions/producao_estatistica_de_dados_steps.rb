@@ -389,7 +389,10 @@ end
 
 Given(/^eu vejo que a última coleta foi feita a "([^"]*)" dias$/) do |last_collection|
   @collection = Collection.last
-  str = "Dias desde a ultima coleta: " + @collection.calc_days.to_s
+  @collection.calc_days
+  @collection.created_at= (@collection.created_at.to_date - 10)
+  @collection.save
+  str = "Dias desde a ultima coleta: " + @collection.created_at.to_date.to_s
   element = find("th", text: str)
   expect(element).to_not be nil
 end
@@ -401,7 +404,6 @@ Given(/^eu vejo que o limite de peso de resíduos é "([^"]*)" kg$/) do |limit_w
 end
 
 Then(/^eu vejo que em "([^"]*)" dias precisarei fazer a licitação para a coleta$/) do |miss_days|
-  page.save_screenshot()
   str = "A próxima coleta deverá ser feita em " + miss_days + " dias"
   element = find("th", str)
   expect(element).to_not be nil
