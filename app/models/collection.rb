@@ -5,6 +5,7 @@ class Collection < ApplicationRecord
   
   validates :max_value, presence: true
   
+  attr_accessor :porcent
   attr_accessor :mean, :miss_days, :miss_weight, :solido_organico, :solido_inorganico, :liquido_organico, :liquido_inorganico, :liquido_inflamavel, :outros
   attr_accessor :solido_organico_percent, :solido_inorganico_percent, :liquido_organico_percent, :liquido_inorganico_percent, :liquido_inflamavel_percent, :outros_percent
   attr_accessor :residue_often_registered_list, :residue_often_registered_number
@@ -86,6 +87,9 @@ class Collection < ApplicationRecord
       if residue.number_registers >= @residue_often_registered_number[lab.name.parameterize.underscore.to_sym]
         @residue_often_registered_number[lab.name.parameterize.underscore.to_sym] = residue.number_registers
         @residue_often_registered_list[lab.name.parameterize.underscore.to_sym] = residue.name
+      elsif residue.number_registers == 0
+      elsif residue.number_registers == @residue_often_registered_number[lab.name.parameterize.underscore.to_sym]
+        @residue_often_registered_list[lab.name.parameterize.underscore.to_sym] += ", "+residue.name
       end
     end
   end
@@ -167,7 +171,33 @@ class Collection < ApplicationRecord
   def calc_days
     days_collect = Collection.last.created_at.to_date - 10
     return days_collect
+  def generate_notification
+    total_weight = 0
+    col = Collection.last
+    col.porcent = 0.93333333
+    
+    Residue.all.each do |res|
+      total_weight += res.registers.where(created_at: [col.created_at..Time.now]).sum(:weight)
+    end
+    
+    if total_weight > col.max_value
+      if(col.notification != nil)
+        notif = Notification.find_by(collection_id: col.id)
+        notif.destroy
+      end
+      notif = Notification.create(message: "Passou do peso limite, deve fazer uma licitação", collection_id: col.id)
+      
+      
+    elsif total_weight > (col.max_value*col.porcent)
+      if(col.notification != nil)
+        notif = Notification.find_by(collection_id: col.id)
+        notif.destroy
+      end
+      Notification.create(message: "O peso está próximo do peso mínimo para fazer uma licitação", collection_id: col.id)
+      
+    end
+    
   end
 end
 
-  
+end  
