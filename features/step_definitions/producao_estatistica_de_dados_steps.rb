@@ -380,16 +380,16 @@ Given(/^eu vejo que o total de resíduos armazenados é "([^"]*)" kg$/) do |res_
   cad_lab_gui("Laboratorio de Genetica Aplicada", "Departamento de Anatomia Humana")
   cad_res_gui("Cal", "Laboratorio de Genetica Aplicada", "Líquido Inflamável")
   cad_reg_gui(res_weight, "Cal")
-  visit 'statistic'
+  visit '/statistic'
   total = res_weight.to_f()
-  str = "Peso Total: " + total.to_s
-  p str
+  str = "Peso total: " + total.to_s
   element = find("th", text: str)
   expect(element).to_not be nil
 end
 
 Given(/^eu vejo que a última coleta foi feita a "([^"]*)" dias$/) do |last_collection|
-  str = "Dias desde a ultima coleta :" + last_collection
+  @collection = Collection.last
+  str = "Dias desde a ultima coleta: " + @collection.calc_days.to_s
   element = find("th", text: str)
   expect(element).to_not be nil
 end
@@ -401,6 +401,7 @@ Given(/^eu vejo que o limite de peso de resíduos é "([^"]*)" kg$/) do |limit_w
 end
 
 Then(/^eu vejo que em "([^"]*)" dias precisarei fazer a licitação para a coleta$/) do |miss_days|
+  page.save_screenshot()
   str = "A próxima coleta deverá ser feita em " + miss_days + " dias"
   element = find("th", str)
   expect(element).to_not be nil
@@ -461,7 +462,6 @@ def validate_type(res_type, res_weight)
 end
 
 Then(/^o sistema calcula a média de "([^"]*)" kg para o "([^"]*)"$/) do |res_weight, dep_name|
-  p @collection.dep_mean
   validate_dep(res_weight, dep_name)  
 end
 

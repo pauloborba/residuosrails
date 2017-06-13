@@ -155,14 +155,18 @@ class Collection < ApplicationRecord
   end
   
   def calc_mean_dep
-    @dep_mean
+    @dep_mean = Hash.new
     dep_residue
-    p "Cheguei"
     Department.all.each do |dep|
       weight = @dep_residue_weight[dep.name.parameterize.underscore.to_sym]
       qntd = @dep_residue_qntd[dep.name.parameterize.underscore.to_sym]
       @dep_mean[dep.name.parameterize.underscore.to_sym] = weight/qntd
     end
+  end
+  
+  def calc_days
+    days_collect = Collection.last.created_at.to_date - 10
+    return days_collect
   end
 end
 

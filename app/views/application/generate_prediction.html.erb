@@ -1,0 +1,6 @@
+<h1>Página de Geração de Previsão de Coleta</h1>
+
+<% collection = Collection.last%>
+<body>
+    <th>A próxima coleta deverá ser feita em <%= collection.calc_miss_days()%> dias</th>
+</body>
