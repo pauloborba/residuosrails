@@ -171,6 +171,8 @@ class Collection < ApplicationRecord
   def calc_days
     days_collect = Collection.last.created_at.to_date - 10
     return days_collect
+  end 
+  
   def generate_notification
     total_weight = 0
     col = Collection.last
@@ -200,4 +202,3 @@ class Collection < ApplicationRecord
   end
 end
 
-end  
